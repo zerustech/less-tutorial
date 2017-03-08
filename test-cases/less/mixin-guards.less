@@ -1,0 +1,240 @@
+/**
+ * Case 1: basic usage of mixin guards.
+*/
+.case-1-mixin (@a) when (lightness(@a) >= 50%) {
+    background-color: black;
+}
+
+.case-1-mixin(@a) when (lightness(@a) < 50%) {
+    background-color: white;
+}
+
+.case-1-mixin(@a) {
+    color: @a;
+}
+
+.case-1-c-1 {
+    .case-1-mixin(#ddd);
+}
+
+.case-1-c-2 {
+    .case-1-mixin(#555);
+}
+
+/**
+ * Case 2: guard comparison operators.
+*/
+.case-2-mixin (@a) when (@a = true) {
+    color: #fff;
+}
+
+.case-2-mixin(@a) when (@a < -2) {
+    color: #000;
+}
+
+.case-2-mixin(@a) when (@a =< -1) {
+    color: #111;
+}
+
+.case-2-mixin(@a) when (@a = 0) {
+    color: #222;
+}
+
+.case-2-mixin(@a) when (@a >= 1) {
+    color: #333;
+}
+
+.case-2-mixin(@a) when (@a > 2) {
+    color: #444;
+}
+
+.case-2-c-1 {
+    .case-2-mixin(true);
+}
+
+.case-2-c-2 {
+    .case-2-mixin(-3);
+}
+
+.case-2-c-3 {
+    .case-2-mixin(-1);
+}
+
+.case-2-c-4 {
+    .case-2-mixin(0);
+}
+
+.case-2-c-5 {
+    .case-2-mixin(1);
+}
+
+.case-2-c-6 {
+    .case-2-mixin(3);
+}
+
+/**
+ * Case 3: guard logical (and) operator.
+*/
+.case-3-mixin(@a) when (@a =< -1) {
+    color: #000;
+}
+
+.case-3-mixin(@a) when (@a > -1) and (@a =< 1) {
+    color: #111;
+}
+
+.case-3-mixin(@a) when (@a > 1) {
+    color: #222;
+}
+
+.case-3-c-1 {
+    .case-3-mixin(-2);
+}
+
+.case-3-c-2 {
+    .case-3-mixin(0);
+}
+
+.case-3-c-3 {
+    .case-3-mixin(2);
+}
+
+/**
+ * Case 4: guard logical (or) operator.
+*/
+.case-4-mixin(@a) when (@a =< -1), (@a >=1) {
+    color: #000;
+}
+
+.case-4-mixin(@a) when (@a > -1) and (@a < 1) {
+    color: #111;
+}
+
+.case-4-c-1 {
+    .case-4-mixin(-2);
+}
+
+.case-4-c-2 {
+    .case-4-mixin(2);
+}
+
+.case-4-c-3 {
+    .case-4-mixin(0);
+}
+
+/**
+ * Case 5: guard logical (not) operator.
+*/
+.case-5-mixin(@a) when not (@a = 0) {
+    color: #000;
+}
+
+.case-5-mixin(@a) when (@a = 0) {
+    color: #111;
+}
+
+.case-5-c-1 {
+    .case-5-mixin(1);
+}
+
+.case-5-c-2 {
+    .case-5-mixin(0);
+}
+
+/**
+ * Case 6: type checking functions.
+*/
+.case-6-mixin(@a) when (iscolor(@a)) {
+    type: "color";
+}
+
+.case-6-mixin(@a) when (isnumber(@a)) {
+    type: "number";
+}
+
+.case-6-mixin(@a) when (isstring(@a)) {
+    type: "string";
+}
+
+.case-6-mixin(@a) when (iskeyword(@a)) {
+    type: "keyword";
+}
+
+.case-6-mixin(@a) when (isurl(@a)) {
+    type: "url";
+}
+
+.case-6-mixin(@a) when (ispixel(@a)) {
+    unit: "px";
+}
+
+.case-6-mixin(@a) when (ispercentage(@a)) {
+    unit: "%";
+}
+
+.case-6-mixin(@a) when (isem(@a)) {
+    unit: "em";
+}
+
+.case-6-c-1 {
+    .case-6-mixin(#000);
+}
+
+.case-6-c-2 {
+    .case-6-mixin(100);
+}
+
+.case-6-c-3 {
+    .case-6-mixin("hello");
+}
+
+.case-6-c-4 {
+    .case-6-mixin(position);
+}
+
+.case-6-c-5 {
+    .case-6-mixin("http://www.zerustech.com");
+}
+
+.case-6-c-6 {
+    .case-6-mixin(2px);
+}
+
+.case-6-c-7 {
+    .case-6-mixin(100%);
+}
+
+.case-6-c-8 {
+    .case-6-mixin(2em);
+}
+
+.case-6-c-8 {
+    .case-6-mixin(2cm);
+}
+
+/**
+ * Case 7: if...else... conditional mixins.
+*/
+.case-7-mixin (@a) when (@a < 0) {
+    color: #000;
+}
+
+.case-7-mixin (@a) when (@a >=0) and (@a < 1) {
+    color: #111;
+}
+
+.case-7-mixin(@a) when (default()) {
+    color: #222;
+}
+
+.case-7-c-1 {
+    .case-7-mixin(-1);
+}
+
+.case-7-c-2 {
+    .case-7-mixin(0);
+}
+
+.case-7-c-3 {
+    .case-7-mixin(1);
+}

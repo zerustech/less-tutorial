@@ -1,0 +1,22 @@
+{
+    "name": "zerustech/less-tutorial",
+    "description": "A tutorial for less.js",
+    "type": "library",
+    "keywords": ["less tutorial"],  
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Michael Lee",
+            "email": "michael.lee@zerustech.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "zerustech/cli": ">=1.0-dev"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}

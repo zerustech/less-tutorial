@@ -1,0 +1,20 @@
+/**
+ * Case 1: basic usage of css guards.
+*/
+@case-1-my-option: true;
+button.case-1 when(@case-1-my-option = true) {
+    color: white;
+}
+
+/**
+ * Case 2: group multiple guards with &.
+*/
+@case-2-my-option: true;
+& when (@case-2-my-option = true) {
+    button.case-2 {
+        color: white;
+    }
+    a.case-2 {
+        color: blue;
+    }
+}

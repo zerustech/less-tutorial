@@ -1,0 +1,271 @@
+/**
+ * Scope in less is very similar to that of programming languages. Variables and
+ * mixins are first looked locally in current scope, and if they are not found,
+ * the compiler will look in the parent scope, and so on.
+ *
+ * A mixin's caller may access variables and mixins declared in the mixin being
+ * called.
+ *
+ * A mixin may access variables or mixins declared in its caller's scope.
+ * 
+ * A detached ruleset's caller may access mixins declared in the detached
+ * ruleset, but can not access variables declared in the ruleset.
+ *
+ * A detached ruleset may access variables or mixins declared in its caller's
+ * scope.
+ *  
+*/
+
+/**
+ * Case 1: basic usage of scope.
+*/
+@case-1-var: red;
+
+#case-1-page {
+    @case-1-var: white;
+    #header {
+        color: @case-1-var; // white
+    }
+}
+
+/**
+ * Case 2: use variables before declarations.
+*/
+@case-2-var: red;
+
+#case-2-page {
+    #header {
+        color: @case-2-var; // white
+    }
+    @case-2-var: white;
+}
+
+/**
+ * Case 3: variables in namespace.
+*/
+#case-3-namespace {
+    @color: #fff;
+    .case-3-c-1 {
+        color: @color;
+    }
+}
+
+.case-3-c-2 {
+    #case-3-namespace > .case-3-c-1;
+    // variables in namespace are not available outside the namespace.
+    // color: #case-3-namespace > @color; won't work.
+}
+
+/**
+ * Case 4: defining a variable twice.
+ * When a variable is defined twice, the last definition of the variable is
+ * used, searching from current scope upwards.
+*/
+@case-4-var: 0;
+.case-4-class {
+    @case-4-var: 1;
+    .brass {
+        @case-4-var: 2;
+        three: @case-4-var;
+        @case-4-var: 3;
+    }
+    one: @case-4-var;
+}
+
+/**
+ * Case 5: variables and mixins defined in a mixin are visible in caller's
+ * scope.
+*/
+.case-5-mixin() {
+    @width: 100%;
+    @height: 200px;
+    .case-5-inner-mixin() {
+        background: white;
+    }
+}
+
+.case-5-caller {
+    .case-5-mixin();
+    width: @width;
+    height: @height;
+    .case-5-inner-mixin();
+}
+
+/**
+ * Case 6: protected variables in caller's context.
+ * a variable defined in mixin is not copied to the caller's context if
+ * if the caller contains a variable with the same name. In other words,
+ * variables declared in caller's context and can not be overridden.
+*/
+.case-6-mixin() {
+    @width: 100%;
+    @height: 200px;
+}
+
+.case-6-caller {
+    @width: 50%;
+    .case-6-mixin();
+    width: @width;
+    height: @height;
+}
+
+/**
+ * Case 7: mixins in mixin.
+ * a mixin defined in mixin is always copied to the caller's context
+ * even there is already a mixin with the same name in caller's context.
+ * It is valid to define multiple mixins with the same name and number of
+ * parameters, less will use properties of all mixins that can apply.
+*/
+.case-7-mixin() {
+    .case-7-inner-mixin() {
+        background: white;
+    }
+}
+
+.case-7-caller {
+    .case-7-inner-mixin() {
+        color: red;
+    }
+    .case-7-mixin();
+    .case-7-inner-mixin();
+}
+
+/**
+ * Case 8: variables in caller's parent scope.
+ * variables declared in caller's parent scope can be overriden.
+*/
+@case-8-margin-top: 8px; // variable declared in caller's parent context.
+
+.case-8-mixin() {
+    @case-8-margin-top: 0px;
+    @case-8-margin-bottom: 4px; 
+}
+
+.case-8-c-1 {
+    margin-top: @case-8-margin-top;
+    margin-bottom: @case-8-margin-bottom;
+    .case-8-mixin(); 
+    // @case-8-margin-top is overridden by the variable declared in mixin
+}
+
+/**
+ * Case 9: variables in detached ruleset and its caller's context. 
+ * A detached ruleset can use all variables and mixins declared in its context
+ * and its caller's context.
+*/
+@case-9-detached-ruleset: {
+    caller-variable: @case-9-caller-variable;
+};
+
+.case-9-selector {
+    @case-9-caller-variable: "hello";
+    @case-9-detached-ruleset();
+}
+
+/**
+ * Case 10: variables with the same name in detached ruleset and its caller's
+ * context. 
+ * If two variables with the same name are declared both in a detached ruleset
+ * and its caller's context. The variable in the detached ruleset takes
+ * precedence over the other one.
+*/
+@case-10-detached-ruleset: {
+    @case-10-variable: "world";
+    caller-variable: @case-10-variable;
+};
+
+.case-10-selector {
+    @case-10-variable: "hello";
+    @case-10-detached-ruleset();
+}
+
+/**
+ * Case 11: mixins in detached ruleset and its caller's context. 
+ * If two mixins with the same name are declared both in a detached ruleset and 
+ * its caller's context, the mixin in the detached ruleset takes precedence over
+ * the other one.
+*/
+@case-11-detached-ruleset: {
+    .case-11-mixin() {
+        background: white;
+    }
+    .case-11-mixin();
+    .case-11-caller-mixin();
+};
+
+.case-11-selector {
+    .case-11-mixin() {
+        color: red;
+    }
+    .case-11-caller-mixin() {
+        border:1px solid green;
+    }
+    @case-11-detached-ruleset();
+}
+
+/**
+ * Case 12: mixin's callers accesses properties and mixins in mixin's scope.
+*/
+.case-12-mixin() {
+    @case-12-mixin-variable: 'hello';
+    .case-12-mixin-mixin() {
+        color: red;
+    }
+}
+
+.case-12-caller {
+    .case-12-mixin();
+    variable-from-mixin: @case-12-mixin-variable;
+    .case-12-mixin-mixin();
+}
+
+/**
+ * Case 13: mixin accesses properties and mixins in its caller's scope.
+*/
+.case-13-mixin() {
+    variable-from-caller: @case-13-caller-variable;
+    .case-13-caller-mixin;
+}
+
+.case-13-caller {
+    @case-13-caller-variable: 'hello'; 
+    .case-13-caller-mixin() {
+        color: red;
+    }
+    .case-13-mixin();
+}
+
+/**
+ * Case 14: detached ruleset's caller accesses properties and mixins in it.
+*/
+@case-14-detached: {
+    @case-14-detached-variable: 'hello';
+    .case-14-detached-mixin() {
+        color: red;
+    }
+};
+
+.case-14-caller {
+    @case-14-detached();
+    // variable-from-detached: @case-14-detached-variable;
+    // caller can not access variables declared in the detached ruleset.
+    .case-14-detached-mixin();
+}
+
+/**
+ * Case 15: detached ruleset accesses properties and mixins in its caller.
+*/
+@case-15-detached: {
+    variable-from-caller: @case-15-caller-variable;
+    .case-15-caller-mixin();
+};
+
+.case-15-caller {
+    @case-15-caller-variable: 'hello';
+    .case-15-caller-mixin() {
+        color: red;
+    }
+    @case-15-detached();
+}
+
+

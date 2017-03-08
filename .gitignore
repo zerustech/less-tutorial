@@ -1,0 +1,9 @@
+vendor
+*.swp
+.buildpath
+.project
+.settings
+.DS_Store
+var/*.pid
+var/*.log
+composer.lock

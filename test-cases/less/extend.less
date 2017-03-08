@@ -1,0 +1,167 @@
+/**
+ * Extend is a less pseudo-class that extends properties from the selectors it
+ * references. It can either be attached to a selector or placed inside a
+ * ruleset.
+*/
+
+/**
+ * Case 1: extend inside ruleset. 
+*/
+.case-1-inline {
+    color: red;
+}
+
+nav.case-1 ul {
+    &:extend(.case-1-inline);
+    background: blue;
+}
+
+/**
+ * Case 2: extend attached to selector.
+*/
+div.case-2 {
+    background: grey;
+}
+
+pre.case-2:hover:extend(div.case-2) {
+    color: red;
+}
+
+/**
+ * Case 3: extends multiple selectors.
+*/
+.case-3-inline {
+    color: red;
+}
+
+.case-3-underline {
+    text-decoration: underline;
+}
+
+nav.case-3 ul {
+    &:extend(.case-3-inline, .case-3-underline);
+    background: blue;
+}
+
+/**
+ * Case 4: extend nested selectors.
+*/
+.case-4-bucket {
+    tr {
+        color: blue;
+    }
+}
+.case-4-some-class:extend(.case-4-bucket tr) {
+    background-color: white;
+}
+
+/**
+ * Case 5: extend "all". It works as the find-and-replace operation.
+*/
+.case-5.a.b.test,
+.case-5.test.c {
+    color: orange;
+}
+
+.case-5.test {
+    &:hover {
+        color: green;
+    }
+}
+
+.case-5.replacement:extend(.test all) {
+    background-color: white;
+}
+
+/**
+ * Case 6: extend attached to selector that contains variables.
+*/
+@case-6-variable: ~".case-6-selector";
+.case-6-bucket {
+    color: blue;
+}
+@{case-6-variable}:extend(.case-6-bucket) {
+    background: white;
+}
+
+/**
+ * Case 7: extend inside @media. 
+*/
+@media print {
+    .case-7-screenClass:extend(.case-7-selector) {}
+    .case-7-selector {
+        color: black;
+    }
+}
+.case-7-selector {
+    color: red;
+}
+@media screen {
+    .case-7-selector {
+        color: blue;
+    }
+}
+
+/**
+ * Case 8: extend at top level.
+*/
+@media screen {
+    .case-8-selector {
+        color: blue;
+    }
+    @media (min-width: 1023px) {
+        .case-8-selector {
+            color: blue;
+        }
+    }
+}
+
+.case-8-topLevel:extend(.case-8-selector) {}
+
+/**
+ * Case 9: duplicated extends.
+*/
+.case-9-alert-info,
+.case-9-widget {
+    color: red;
+}
+.case-9-alert:extend(.case-9-alert-info, .case-9-widget) {}
+
+/**
+ * Case 10: avoid adding a base class. 
+*/
+.case-10-animal {
+    background-color: black;
+    color: white;
+}
+.case-10-bear {
+    &:extend(.case.10.animal);
+    background-color: brown;
+}
+
+/**
+ * Case 11: reducing css size.
+*/
+.case-11-my-inline-block {
+    display: inline-block;
+    font-size: 0;
+}
+.case-11-thing1 {
+    &:extend(.case-11-my-inline-block);
+}
+.case-11-thing2 {
+    &:extend(.case-11-my-inline-block);
+}
+
+/**
+ * Case 12: combining styles.
+ * Use extend as an alternative for mixin when the selector to be included /
+ * extended consists of multiple elements.
+*/
+li.case-12-list > a {
+    color: red;
+}
+
+button.case-12-list-style {
+    &:extend(li.case-12-list > a);
+}

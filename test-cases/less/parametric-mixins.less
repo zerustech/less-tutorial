@@ -1,0 +1,174 @@
+/**
+ * Case 1: parametric mixin with single parameter.
+*/
+.case-1-border-radius(@radius) {
+    -webkit-border-radius: @radius;
+       -moz-border-radius: @radius;
+            border-radius: @radius;
+}
+
+#case-1-header {
+    .case-1-border-radius(4px);
+}
+
+.case-1-button {
+    .case-1-border-radius(6px);
+}
+
+/**
+ * Case 2: multiple parameters.
+ * Syntax:
+ * - Multiple parameters are separated by semicolons.
+ * - It is valid to declare multiple mixins with the same name and number of
+ *   parameters.
+*/
+.case-2-mixin(@color) {
+    color-1: @color;
+}
+
+.case-2-mixin(@color) {
+    color-2: @color;
+}
+
+.case-2-mixin(@color; @padding: 2) {
+    color-3: @color;
+    padding-1: @padding;
+}
+
+.case-2-mixin(@color; @paddig; @margin: 2) {
+    color-4: @color;
+    padding-2: @padding;
+    margin: @margin @margin @margin @margin;
+}
+
+.case-2-c-1 {
+    .case-2-mixin(#008000);
+}
+
+/**
+ * Case 3: named parameters.
+*/
+.case-3-mixin(@color: black; @margin: 10px; @padding: 20px) {
+    color: @color;
+    margin: @margin;
+    padding: @padding;
+}
+
+.case-3-c-1 {
+    .case-3-mixin(@margin: 20px; @color: #33acfe);
+}
+
+.case-3-c-2 {
+    .case-3-mixin(#efca44; @padding: 40px);
+}
+
+/**
+ * Case 4: the @arguments variable.
+*/
+.case-4-box-shadow(@x: 0; @y: 0; @blur: 1px; @color: #000) {
+    -webkit-box-shadow: @arguments;
+       -moz-box-shadow: @arguments;
+            box-shadow: @arguments;
+}
+
+.case-4-big-block {
+    .case-4-box-shadow(2px; 5px);
+}
+
+/**
+ * Case 5: advanced arguments and the @rest variable. 
+*/
+.case-5-mixin-1(...) { // accepts 0-n arguments.
+    arguments: @arguments;
+}
+.case-5-c-1 {
+    .case-5-mixin-1(a;b;c);
+}
+
+.case-5-mixin-2() { // accepts no arguments.
+    arguments: @arguments;
+}
+.case-5-c-2 {
+    .case-5-mixin-2();
+}
+
+.case-5-mixin-3(@a:1) { // accepts 0-1 argument.
+    a: @a;
+    arguments: @arguments;
+}
+.case-5-c-3 {
+    .case-5-mixin-3(a);
+}
+
+.case-5-mixin-4(@a:1;...) { // accepts 0-n arguments.
+    a: @a;
+    arguments: @arguments;
+}
+.case-5-c-4 {
+    .case-5-mixin-4(a;b;c);
+}
+
+.case-5-mixin-5(@a;...) { // accepts 1-n arguments.
+    a: @a;
+    arguments: @arguments;
+}
+.case-5-c-5 {
+    .case-5-mixin-5(a;b;c);
+}
+
+.case-5-mixin-6(@a;@rest...) { 
+    // @rest is bound to arguments after @a
+    // @arguments is bound to all arguments.
+    a: @a;
+    rest: @rest;
+    arguments: @arguments;
+}
+.case-5-c-6 {
+    .case-5-mixin-6(a;b;c);
+}
+
+/**
+ * Case 6: pattern matching.
+*/
+.case-6-mixin(dark; @color) {
+    color: darken(@color, 10%);
+}
+
+.case-6-mixin(light; @color) {
+    color: lighten(@color, 10%);
+}
+
+.case-6-mixin(@mode; @color) {
+    display: block;
+}
+
+.case-6-c-1 {
+    .case-6-mixin(dark; #888);
+}
+
+.case-6-c-2 {
+    .case-6-mixin(light; #888);
+}
+
+.case-6-c-3 {
+    .case-6-mixin(other;#888);
+}
+
+/**
+ * Case 7: another example of pattern matching.
+*/
+.case-7-mixin(@a) {
+    color: @a;
+}
+
+.case-7-mixin(@a; @b) {
+    color: fade(@a; @b);
+}
+
+.case-7-c-1 {
+    .case-7-mixin(#888);
+}
+
+.case-7-c-2 {
+    .case-7-mixin(#888, 10%);
+}

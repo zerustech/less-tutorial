@@ -1,0 +1,41 @@
+/**
+ * Case 1: variables defined in mixins are visible in caller's scope.
+*/
+.case-1-mixin() {
+    @width: 100%;
+    @height: 200px;
+}
+
+.case-1-caller {
+    .case-1-mixin();
+    width: @width;
+    height: @height;
+}
+
+/**
+ * Case 2: mixins as functions.
+ * Assign the result to a variable that has the same name as the mixin, thus the
+ * mixin can be used almost like a function.
+*/
+.case-2-average(@x; @y) {
+    @case-2-average: ((@x + @y) / 2);
+}
+
+div.case-2 {
+    .case-2-average(16px, 50px);
+    padding: @case-2-average;
+}
+
+/**
+ * Case 3: mixin in mixin can act as return value too.
+*/
+.case-3-unlock(@value) { // outer mixin
+    .doSomething() { // nested mixin
+        declaration: @value;
+    }
+}
+
+#case-3-namespace {
+    .case-3-unlock(5);
+    .doSomething(); // nested mixin was copied here and is usable.
+}

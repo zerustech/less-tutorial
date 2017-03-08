@@ -1,0 +1,102 @@
+/**
+ * Case 1: basic usage of namespace.
+*/
+#case-1-namespace {
+    .button {
+        display: block;
+        border: 1px solid black;
+        background-color: grey;
+        &:hover { // & refers to parent selectors.
+            background-color: white;
+        }
+    }
+    // .tab {...}
+    // .citation {...}
+}
+
+#case-1-header a {
+    color: orange;
+    #case-1-namespace > .button;
+}
+
+/**
+ * Case 2: class selectors in namespace.
+ * The following expressions are equivalent:
+ * #<namespace> > .<class>
+ * #<namespace> .<class>
+ * #<namespace>.<class>
+*/
+#case-2-namespace() { // Use paratheses to exclude the namespace from output.
+    .inner {
+        color: red;
+    }
+}
+
+.case-2-c-1 {
+    #case-2-namespace > .inner;
+}
+
+.case-2-c-2 {
+    #case-2-namespace .inner;
+}
+
+.case-2-c-3 {
+    #case-2-namespace.inner;
+}
+
+/**
+ * Case 3: id selectors in namespace.
+ * The following expressions are equivalent:
+ * #<namespace> > #<id>
+ * #<namespace> #<id>
+ * #<namespace>#<id>
+*/
+#case-3-namespace() { // Use paratheses to exclude the namespace from output.
+    #inner {
+        color: red;
+    }
+}
+
+.case-3-c-1 {
+    #case-3-namespace > #inner;
+}
+
+.case-3-c-2 {
+    #case-3-namespace #inner;
+}
+
+.case-3-c-3 {
+    #case-3-namespace#inner;
+}
+
+/**
+ * Case 4: guarded namespaces.
+*/
+@case-4-mode: huge;
+#case-4-namespace() when(@case-4-mode=huge) {
+    .mixin {
+        color: red;
+    }
+}
+
+.case-4-c-1 {
+    #case-4-namespace.mixin;
+}
+
+/**
+ * Case 5: the !important keyword.
+ * Use the !important keyword afer mixin call to mark all properties inherited
+ * as !important.
+*/
+.case-5-foo {
+    background: white;
+    color: blue;
+}
+
+.case-5-normal {
+    .case-5-foo;
+}
+
+.case-5-important {
+    .case-5-foo !important;
+}

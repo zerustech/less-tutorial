@@ -1,0 +1,11 @@
+/**
+ * Case 1: basic usage of functions.
+*/
+@case-1-base: #f04615;
+@case-1-width: 0.5;
+
+.case-1-class {
+    width: percentage(@case-1-width); // 50%
+    color: saturate(@case-1-base, 5%);
+    background-color: spin(lighten(@case-1-base, 25%), 8);
+}

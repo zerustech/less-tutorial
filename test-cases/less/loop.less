@@ -1,0 +1,24 @@
+/**
+ * Case 1: basic usage of loop.
+*/
+
+.case-1-loop(@counter) when (@counter >0) {
+    .case-1-loop(@counter - 1);
+    width: (10px * @counter);
+}
+
+div.case-1 {
+    .case-1-loop(5);
+}
+
+/**
+ * Case 2: css grid classes with loop.
+*/
+.case-2-generate-columns(@n; @i: 1) when (@i =< @n) {
+    .case-2-column-@{i} {
+        width: (@i * 100% / @n);
+    }
+    .case-2-generate-columns(@n; (@i + 1));
+}
+
+.case-2-generate-columns(4);
